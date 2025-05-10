@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hotel Management{% endblock %}</title>
+    <!-- Bootstrap CSS (desde CDN) -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- Font Awesome (desde CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <!-- Custom CSS  -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        {% include 'partials/header.html' %}
+    </header>
+    
+    <main class="container my-4">        
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="footer mt-auto py-3 bg-light">
+        {% include 'partials/footer.html' %}
+    </footer>
+    
+    <!-- Bootstrap Bundle con Popper (local) -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

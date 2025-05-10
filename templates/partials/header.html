@@ -1,0 +1,95 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+  <div class="container">
+    <!-- Logo del hotel -->
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'core:home' %}">
+      <img src="{% static 'img/logo.png' %}" alt="Hotel Logo" height="40" class="me-2">
+      <span class="fw-bold text-primary">Hotel Paraíso</span>
+    </a>
+    
+    <!-- Botón hamburguesa para móviles -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" 
+            aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <!-- Menú principal -->
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active fw-semibold{% endif %}" 
+             href="#">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if 'rooms' in request.path %}active fw-semibold{% endif %}" 
+             href="#">Habitaciones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active fw-semibold{% endif %}" 
+             href="#">Nosotros</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active fw-semibold{% endif %}" 
+             href="#">Contacto</a>
+        </li>
+      </ul>
+      
+      <!-- Menú de usuario (lado derecho) -->
+      <div class="d-flex">
+        {% if user.is_authenticated %}
+          <!-- Usuario autenticado -->
+          <div class="dropdown">
+            <a class="btn btn-outline-primary dropdown-toggle d-flex align-items-center" href="#" role="button" 
+               id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              {% if user.profile.profile_picture %}
+                <img src="{{ user.profile.profile_picture.url }}" alt="Profile" 
+                     class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+              {% else %}
+                <i class="fas fa-user-circle me-2" style="font-size: 1.4rem;"></i>
+              {% endif %}
+              <span class="d-none d-md-inline">{{ user.get_full_name|default:user.username }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+              <li><h6 class="dropdown-header">Mi cuenta</h6></li>
+              <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                <i class="fas fa-user-circle me-2 text-primary"></i>Perfil</a>
+              </li>
+              <li><a class="dropdown-item" href="{% url 'reservations:my_reservations' %}">
+                <i class="fas fa-calendar-check me-2 text-primary"></i>Mis reservas</a>
+              </li>
+              {% if user.is_staff %}
+                <li><hr class="dropdown-divider"></li>
+                <li><h6 class="dropdown-header">Administración</h6></li>
+                <li><a class="dropdown-item" href="{% url 'admin:index' %}">
+                  <i class="fas fa-cogs me-2 text-primary"></i>Panel de administración</a>
+                </li>
+              {% endif %}
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <form method="post" action="{% url 'accounts:logout' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item text-danger">
+                    <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        {% else %}
+          <!-- Usuario no autenticado -->
+          <a href="#" class="btn btn-outline-primary me-2">
+            <i class="fas fa-sign-in-alt me-1"></i> Iniciar sesión
+          </a>
+          <a href="#" class="btn btn-primary d-none d-sm-inline">
+            <i class="fas fa-user-plus me-1"></i> Registrarse
+          </a>
+        {% endif %}
+        
+        <!-- Botón de reserva rápida (visible para todos) -->
+        <a href="#" class="btn btn-success ms-2">
+          <i class="fas fa-calendar-plus me-1 d-none d-sm-inline"></i> Reservar
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
