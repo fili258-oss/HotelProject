@@ -94,7 +94,3 @@ api-docs/
 # Archivos de dependencias de frontend si usas frameworks JS
 node_modules/
 bower_components/
-
-# Archivos compilados de frontend
-*.min.js
-*.min.css
