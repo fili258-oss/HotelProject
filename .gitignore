@@ -31,7 +31,6 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media/
-static/
 
 # Si usas collectstatic pero quieres incluir tu carpeta static en el repo
 # comenta la línea static/ y usa la siguiente:

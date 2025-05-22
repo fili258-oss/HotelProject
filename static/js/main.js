@@ -1,0 +1,1 @@
+console.log("iniciando archivo base.html bootstrap v 5.2.3");
