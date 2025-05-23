@@ -21,12 +21,16 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),   
+<<<<<<< HEAD
     path('', include('users.urls')),
     path('users/', include('users.urls')),
     path('rooms/', include('rooms.urls')),
     path('reservations/', include('reservations.urls')),
     path('reviews/', include('reviews.urls')),
     path('api/', include('api.urls')),
+=======
+    path('', include('users.urls', namespace='users')),  
+>>>>>>> 10cb3d09065e53b934e285ed69011f67feec2486
     # Páginas principales
     
 ]
