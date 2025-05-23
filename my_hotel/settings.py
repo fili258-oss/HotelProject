@@ -37,9 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Custom apps
-    'core',
-    'accounts',
+    # Custom apps    
+    'users',
     'rooms',
     'reservations',
     'reviews',
@@ -134,4 +133,4 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 #Custom user model
-#AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'
