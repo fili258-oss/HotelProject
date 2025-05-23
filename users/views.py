@@ -1,22 +1,34 @@
 from django.shortcuts import render, redirect
+from django.http import Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.urls import reverse_lazy
+
+from django.shortcuts import get_object_or_404
+from .models import Empleado, Rol
+from rooms.models import Hotel
+from django.db import transaction
 #from .forms import UserProfileForm
 #from .models import UserProfile
 from .models import User
 
-@login_required
-def dashboardApplicant(request):
-    return render(request, 'dashboard/index.html')
+def home(request):
+    """
+    Vista principal que valida si el usuario está autenticado
+    """
+    if request.user.is_authenticated:
+        # Si está autenticado, redirige al dashboard
+        return redirect('users:dashboard')
+    else:
+        # Si no está autenticado, redirige al login
+        return redirect('users:login')
 
 def userLogin(request):    
     if request.method == 'POST': 
                               
             user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-            #print("user", user)
             if user is not None:
                 
                 if user.is_active:
@@ -30,6 +42,21 @@ def userLogin(request):
                         'error': 'Usuario o contraseña incorrectosss'})        
     else:
         return render(request, 'auth/login.html')
+    
+@login_required
+def dashboardApplicant(request):
+    """
+    Vista del dashboard (requiere autenticación)
+    """
+    return render(request, 'dashboard/index.html')
+
+def logoutView(request):
+    """
+    Vista para cerrar sesión
+    """
+    logout(request)
+    messages.success(request, 'Has cerrado sesión exitosamente.')
+    return redirect('users:home')
 """""
 def register(request):
     if request.method == 'POST':
@@ -54,11 +81,7 @@ def profile(request):
     
     return render(request, 'users/profile.html', {'profile': profile})
 """""
-@login_required	
-def logoutView(request):
-    logout(request)
-    messages.success(request, 'Has cerrado sesión exitosamente.')
-    return redirect('users:login')
+
 """""
 @login_required
 def edit_profile(request):
@@ -80,11 +103,6 @@ def edit_profile(request):
 
 """""
 
-from django.shortcuts import get_object_or_404
-from .models import Empleado, Rol
-from rooms.models import Hotel
-from django.db import transaction
-
 def registrar_empleado(hotel_id, rol_id, nombre, apellido, email, telefono, fecha_contratacion, salario):
     with transaction.atomic():
         hotel = get_object_or_404(Hotel, hotel_id=hotel_id)
@@ -100,3 +118,9 @@ def registrar_empleado(hotel_id, rol_id, nombre, apellido, email, telefono, fech
             salario=salario
         )
         return empleado
+
+def custom_404_view(request, exception):
+    """
+    Vista personalizada para manejar errores 404
+    """
+    return render(request, 'errors/404.html', status=404)
