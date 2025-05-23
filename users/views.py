@@ -21,7 +21,7 @@ def userLogin(request):
                 
                 if user.is_active:
                     login(request, user)
-                    return redirect('dashboard')
+                    return redirect('users:dashboard')
                 else:
                     return render(request, 'auth/login.html', {
                         'error': 'El usuario no esta activo'})
