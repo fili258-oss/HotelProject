@@ -3,69 +3,74 @@
 {% block title %} MyHotel | Dashboard {% endblock %}
 {% block css %}
 <style>
-section.pricing {
-  background: #007bff;
-  background: linear-gradient(to right, #0062E6, #33AEFF);
-}
-.pricing .card {
-  border: none;
-  border-radius: 1rem;
-  transition: all 0.2s;
-  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-}
-.pricing hr {
-  margin: 1.5rem 0;
-}
-.pricing .card-title {
-  margin: 0.5rem 0;
-  font-size: 1rem;
-  letter-spacing: .1rem;
-  color: rgb(3, 18, 33);
-}
-.pricing .card-price {
-  font-size: 3rem;
-  margin: 0;
-}
-.pricing .card-price .period {
-  font-size: 0.8rem;
-}
-.pricing ul li {
-  margin-bottom: 1rem;
-}
-.pricing .text-muted {
-  opacity: 0.7;
-}
-.pricing .btn {
-  font-size: 80%;
-  border-radius: 5rem;
-  letter-spacing: .1rem;
-  font-weight: bold;
-  padding: 1rem;
-  opacity: 0.7;
-  transition: all 0.2s;
-}
-@media (min-width: 992px) {
-  .pricing .card:hover {
-    margin-top: -.25rem;
-    margin-bottom: .25rem;
-    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
-  }
-  .pricing .card:hover .btn {
-    opacity: 1;
-  }
+body {
+  background: linear-gradient(135deg, #e0e7ff 0%, #fff 100%);
+  min-height: 100vh;
 }
 .banner-image {
-  padding-top: 10rem;
-  padding-bottom: calc(10rem - 4.5rem);
-  background: linear-gradient(to bottom, rgba(4, 4, 4, 0.375) 0%, rgba(0, 0, 0, 0.313) 100%), url("{% static '/assets/imgs/dashboard/BannerWelcome.jpg' %}");
+  padding-top: 7rem;
+  padding-bottom: 3rem;
+  background: linear-gradient(to bottom, rgba(44,55,72,0.7) 0%, rgba(44,55,72,0.4) 100%), url("{% static '/assets/imgs/dashboard/BannerWelcome.jpg' %}");
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: scroll;
   background-size: cover;
 }
 .profile img {
   border-style: solid;
   border-color: white;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+.dashboard-card {
+  border: none;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 24px rgba(44,55,72,0.08);
+  transition: box-shadow 0.2s;
+  background: #fff;
+}
+.dashboard-card:hover {
+  box-shadow: 0 8px 32px rgba(44,55,72,0.18);
+  transform: translateY(-4px) scale(1.02);
+}
+.dashboard-card .card-body {
+  padding: 2rem 1.5rem;
+}
+.dashboard-card .icon img {
+  filter: drop-shadow(0 2px 8px rgba(44,55,72,0.10));
+}
+.dashboard-card .card-title {
+  font-weight: 600;
+  color: #2d3748;
+  letter-spacing: .05rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.dashboard-card ul {
+  padding-left: 1.2rem;
+}
+.dashboard-card ul li {
+  margin-bottom: 0.7rem;
+  color: #374151;
+  font-size: 1rem;
+}
+.dashboard-card .btn {
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: .05rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.dashboard-card .btn-primary {
+  background: #2d3748;
+  border: none;
+}
+.dashboard-card .btn-primary:hover {
+  background: #374151;
+}
+@media (max-width: 991.98px) {
+  .dashboard-card {
+    margin-bottom: 2rem;
+  }
 }
 </style>
 {% endblock %}
@@ -79,86 +84,74 @@ section.pricing {
     <p class="text-white mb-0">Gestión de Reservas de Hotel</p>
   </div>
 </div>
-<section class="pricing py-5">
-  <div class="container-fluid">
-    <div class="row">
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
       <!-- Buscar Habitaciones -->
-      <div class="col-lg-3">
-        <div class="card mb-5 mb-lg-0">
-          <div class="card-body">
-            <div class="icon text-center mt-4">
-              <img src="{% static 'assets/imgs/dashboard/buscar_habitaciones.svg' %}" alt="Buscar habitaciones" width="100" height="100">
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card dashboard-card h-100">
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="icon text-center mt-2 mb-2">
+              <img src="{% static 'assets/imgs/dashboard/buscar_habitaciones.svg' %}" alt="Buscar habitaciones" width="80" height="80">
             </div>
             <h5 class="card-title text-center">Buscar Habitaciones</h5>
-            <hr>
-            <ul class="fa-ul">
+            <ul class="fa-ul mb-4">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscar por hotel</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Filtrar por fechas</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Capacidad mínima</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>WiFi Gratis</li>
             </ul>
-            <div class="d-grid">
-              <a href="{% url 'rooms:buscar_habitaciones_disponibles' hotel_id=1 %}" class="btn btn-primary">Buscar</a>
-            </div>
+            <a href="{% url 'rooms:buscar_habitaciones_disponibles' hotel_id=1 %}" class="btn btn-primary w-100">Buscar</a>
           </div>
         </div>
       </div>
       <!-- Crear Reserva -->
-      <div class="col-lg-3">
-        <div class="card mb-5 mb-lg-0">
-          <div class="card-body">
-            <div class="icon text-center mt-4">
-              <img src="{% static 'assets/imgs/dashboard/crear_reserva.svg' %}" alt="Crear reserva" width="100" height="100">
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card dashboard-card h-100">
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="icon text-center mt-2 mb-2">
+              <img src="{% static 'assets/imgs/dashboard/crear_reserva.svg' %}" alt="Crear reserva" width="80" height="80">
             </div>
             <h5 class="card-title text-center">Crear Reserva</h5>
-            <hr>
-            <ul class="fa-ul">
+            <ul class="fa-ul mb-4">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Seleccionar habitación</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Aplicar promociones</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Generar factura</li>
             </ul>
-            <div class="d-grid">
-              <a href="{% url 'reservations:crear_reserva' %}" class="btn btn-primary">Reservar</a>
-            </div>
+            <a href="{% url 'reservations:crear_reserva' %}" class="btn btn-primary w-100">Reservar</a>
           </div>
         </div>
       </div>
       <!-- Ver Promociones -->
-      <div class="col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="icon text-center mt-4">
-              <img src="{% static 'assets/imgs/dashboard/promociones.svg' %}" alt="Promociones" width="100" height="100">
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card dashboard-card h-100">
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="icon text-center mt-2 mb-2">
+              <img src="{% static 'assets/imgs/dashboard/promociones.svg' %}" alt="Promociones" width="80" height="80">
             </div>
             <h5 class="card-title text-center">Promociones Activas</h5>
-            <hr>
-            <ul class="fa-ul">
+            <ul class="fa-ul mb-4">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Ver promociones activas</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Contar usos</li>
             </ul>
-            <div class="d-grid">
-              <a href="{% url 'reservations:listar_promociones_activas' %}" class="btn btn-primary">Ver Promociones</a>
-            </div>
+            <a href="{% url 'reservations:listar_promociones_activas' %}" class="btn btn-primary w-100">Ver Promociones</a>
           </div>
         </div>
       </div>
       <!-- Reportes -->
-      <div class="col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="icon text-center mt-4">
-              <img src="{% static 'assets/imgs/dashboard/reportes.svg' %}" alt="Reportes" width="100" height="100">
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card dashboard-card h-100">
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="icon text-center mt-2 mb-2">
+              <img src="{% static 'assets/imgs/dashboard/reportes.svg' %}" alt="Reportes" width="80" height="80">
             </div>
             <h5 class="card-title text-center">Reportes</h5>
-            <hr>
-            <ul class="fa-ul">
+            <ul class="fa-ul mb-4">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Ingresos por hotel</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Ocupación actual</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Puntuación media</li>
             </ul>
-            <div class="d-grid">
-              <a href="{% url 'reservations:calcular_ingreso_hotel' hotel_id=1 %}" class="btn btn-primary">Ver Reportes</a>
-            </div>
+            <a href="{% url 'reservations:calcular_ingreso_hotel' hotel_id=1 %}" class="btn btn-primary w-100">Ver Reportes</a>
           </div>
         </div>
       </div>
