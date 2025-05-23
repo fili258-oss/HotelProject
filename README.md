@@ -244,3 +244,32 @@ gunicorn hotel_project.wsgi:application --bind 127.0.0.1:8000
 ## Licencia
 
 Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
+
+
+
+-----------------------
+
+# HotelProject
+Sistema de gestión de reservas de hotel con Django.
+
+## Instalación
+1. Clona el repositorio: `git clone <URL>`
+2. Instala dependencias: `pip install -r requirements.txt`
+3. Aplica migraciones: `python manage.py migrate`
+4. Crea un superusuario: `python manage.py createsuperuser`
+5. Recolecta archivos estáticos: `python manage.py collectstatic`
+6. Inicia el servidor: `python manage.py runserver`
+
+## URLs Principales
+- `/users/` - Login
+- `/users/register/` - Registro de clientes
+- `/rooms/hoteles/crear/` - Registrar un nuevo hotel
+- `/reservations/reservas/crear/` - Crear una reserva
+- `/api/hoteles/crear/` - Endpoint API para crear hoteles
+
+## Estructura
+- `users`: Gestión de usuarios, clientes y empleados
+- `rooms`: Gestión de hoteles, habitaciones y servicios
+- `reservations`: Gestión de reservas, promociones y facturas
+- `reviews`: Gestión de reseñas
+- `api`: Endpoints REST para la API
