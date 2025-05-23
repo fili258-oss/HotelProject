@@ -1,81 +1,98 @@
 {% extends 'base.html' %} {% load static %} {% block title %} MyHotel | Ingreso
 de usuarios {% endblock %} {% block css %}
 <style>
-  .login {
-    min-height: 80vh;
+  body {
+    background: linear-gradient(135deg, #e0e7ff 0%, #fff 100%);
+    min-height: 100vh;
   }
 
-  .bg-image {
-    background-image: url("{% static '/assets/imgs/home/WorkBanner.jpg' %}");
-    background-size: cover;
-    background-position: center;
+  .login-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    padding: 40px 32px;
+    max-width: 400px;
+    margin: 60px auto;
   }
 
   .login-heading {
-    font-weight: 300;
+    font-weight: 600;
+    color: #2d3748;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+    text-align: center;
   }
 
   .btn-login {
-    font-size: 0.9rem;
+    font-size: 1rem;
     letter-spacing: 0.05rem;
     padding: 0.75rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    transition: background 0.2s;
+  }
+
+  .btn-login:hover {
+    background: #374151;
+    color: #fff;
+  }
+
+  .form-floating>label {
+    color: #6b7280;
+  }
+
+  .alert {
+    border-radius: 8px;
+    font-size: 0.95rem;
   }
 </style>
 {% endblock %} {% block content %}
-
-<div class="container-fluid ps-md-0">
-  <div class="row g-0">
-    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
-    <div class="col-md-8 col-lg-6">
-      <div class="login d-flex align-items-center py-5">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-9 col-lg-8 mx-auto">
-              <h1 class="login-heading mb-4">Ingrese a su cuenta</h1>
-              <!-- Sign In Form -->
-              {% if error %}
-              <div class="alert alert-danger" role="alert">{{ error }}</div>
-              {% endif %}
-              <form action="" method="POST">
-                {% csrf_token %}
-                <div class="form-floating mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="username"
-                    id="floatingInput"
-                    placeholder="Ingrese su correo"
-                    required
-                  />
-                  <label for="floatingInput">Usuario</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input
-                    type="password"
-                    class="form-control"
-                    name="password"
-                    id="floatingPassword"
-                    placeholder="Ingrese su contraseña"
-                    required
-                  />
-                  <label for="floatingPassword">Contraseña</label>
-                </div>
-                <div class="d-grid">
-                  <button
-                    type="submit"
-                    class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
-                    type="submit"
-                  >
-                    Ingresar
-                  </button>
-                  <input type="hidden" name="next" value="{{ next }}" />
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="login-card">
+    <h1 class="login-heading">Ingrese a su cuenta</h1>
+    <!-- Sign In Form -->
+    {% if error %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% endif %}
+    <form action="" method="POST">
+      {% csrf_token %}
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          name="username"
+          id="floatingInput"
+          placeholder="Ingrese su correo"
+          required
+        />
+        <label for="floatingInput">Usuario</label>
       </div>
+      <div class="form-floating mb-4">
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          id="floatingPassword"
+          placeholder="Ingrese su contraseña"
+          required
+        />
+        <label for="floatingPassword">Contraseña</label>
+      </div>
+      <div class="d-grid">
+        <button
+          type="submit"
+          class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
+        >
+          Ingresar
+        </button>
+        <input type="hidden" name="next" value="{{ next }}" />
+      </div>
+    </form>
+    <div class="mt-3 text-center">
+      <span>¿No tienes cuenta?</span>
+      <a href="{% url 'users:register' %}" class="text-decoration-none"
+        style="color:#2d3748;font-weight:500;">Regístrate</a>
     </div>
   </div>
 </div>
-{% endblock %}
+{% endblock %}  

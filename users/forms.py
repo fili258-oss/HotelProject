@@ -16,14 +16,24 @@ class ClienteCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ('username', 'email', 'password1', 'password2')
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 
     def save(self, commit=True):
         user = super().save(commit=False)
         if commit:
             user.save()
             Cliente.objects.create(
-                user=user,
+                # user=user,
                 nombre=self.cleaned_data['nombre'],
                 apellido=self.cleaned_data['apellido'],
                 email=self.cleaned_data['email'],

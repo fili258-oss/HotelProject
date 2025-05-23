@@ -3,86 +3,131 @@
 {% block title %} MyHotel | Registro de Cliente {% endblock %}
 {% block css %}
 <style>
-  .register {
-    min-height: 80vh;
+  body {
+    background: linear-gradient(135deg, #e0e7ff 0%, #fff 100%);
+    min-height: 100vh;
   }
-  .bg-image {
-    background-image: url("{% static '/assets/imgs/home/WorkBanner.jpg' %}");
-    background-size: cover;
-    background-position: center;
+  .register-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 40px 32px;
+    max-width: 400px;
+    margin: 60px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
   .register-heading {
-    font-weight: 300;
+    font-weight: 600;
+    color: #2d3748;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+    text-align: center;
   }
   .btn-register {
-    font-size: 0.9rem;
+    font-size: 1rem;
     letter-spacing: 0.05rem;
     padding: 0.75rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+    transition: background 0.2s;
+  }
+  .btn-register:hover {
+    background: #374151;
+    color: #fff;
+  }
+  .form-floating > label {
+    color: #6b7280;
+  }
+  .alert {
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  .register-link {
+    color: #2d3748;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .register-link:hover {
+    color: #374151;
+    text-decoration: underline;
   }
 </style>
 {% endblock %}
 {% block content %}
-<div class="container-fluid ps-md-0">
-  <div class="row g-0">
-    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
-    <div class="col-md-8 col-lg-6">
-      <div class="register d-flex align-items-center py-5">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-9 col-lg-8 mx-auto">
-              <h1 class="register-heading mb-4">Crear Cuenta</h1>
-              {% if messages %}
-                {% for message in messages %}
-                  <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
-                {% endfor %}
-              {% endif %}
-              <form action="" method="POST">
-                {% csrf_token %}
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" name="username" id="username" placeholder="Usuario" required>
-                  <label for="username">Usuario</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Correo electrónico" required>
-                  <label for="email">Correo electrónico</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" required>
-                  <label for="nombre">Nombre</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido" required>
-                  <label for="apellido">Apellido</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" name="telefono" id="telefono" placeholder="Teléfono">
-                  <label for="telefono">Teléfono</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <textarea class="form-control" name="direccion" id="direccion" placeholder="Dirección"></textarea>
-                  <label for="direccion">Dirección</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <textarea class="form-control" name="preferencias" id="preferencias" placeholder="Preferencias"></textarea>
-                  <label for="preferencias">Preferencias</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input type="password" class="form-control" name="password1" id="password1" placeholder="Contraseña" required>
-                  <label for="password1">Contraseña</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input type="password" class="form-control" name="password2" id="password2" placeholder="Confirmar contraseña" required>
-                  <label for="password2">Confirmar contraseña</label>
-                </div>
-                <div class="d-grid">
-                  <button type="submit" class="btn btn-lg btn-primary btn-register text-uppercase fw-bold mb-2">Registrarse</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="register-card">
+    <h1 class="register-heading">Crear Cuenta</h1>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    {% if form.errors %}
+      <div class="alert alert-danger">
+        {{ form.errors }}
       </div>
+    {% endif %}
+    <form action="" method="POST" autocomplete="off" id="register-form">
+      {% csrf_token %}
+      <div class="form-floating mb-3">
+        {{ form.username }}
+        <label for="{{ form.username.id_for_label }}">Usuario</label>
+      </div>
+      <div class="form-floating mb-3">
+        {{ form.email }}
+        <label for="{{ form.email.id_for_label }}">Correo electrónico</label>
+      </div>
+      <div class="form-floating mb-3">
+        {{ form.nombre }}
+        <label for="{{ form.nombre.id_for_label }}">Nombre</label>
+      </div>
+      <div class="form-floating mb-3">
+        {{ form.apellido }}
+        <label for="{{ form.apellido.id_for_label }}">Apellido</label>
+      </div>
+      <div class="form-floating mb-3">
+        {{ form.telefono }}
+        <label for="{{ form.telefono.id_for_label }}">Teléfono</label>
+      </div>
+      <div class="form-floating mb-3">
+        {{ form.direccion }}
+        <label for="{{ form.direccion.id_for_label }}">Dirección</label>
+      </div>
+      <div class="form-floating mb-3">
+        {{ form.preferencias }}
+        <label for="{{ form.preferencias.id_for_label }}">Preferencias</label>
+      </div>
+      <div class="form-floating mb-3">
+        {{ form.password1 }}
+        <label for="{{ form.password1.id_for_label }}">Contraseña</label>
+      </div>
+      <div class="form-floating mb-3">
+        {{ form.password2 }}
+        <label for="{{ form.password2.id_for_label }}">Confirmar contraseña</label>
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-lg btn-primary btn-register text-uppercase fw-bold mb-2">Registrarse</button>
+      </div>
+    </form>
+    <div class="mt-3 text-center">
+      <span>¿Ya tienes cuenta?</span>
+      <a href="{% url 'users:login' %}" class="register-link">Inicia sesión</a>
     </div>
   </div>
 </div>
+<script>
+  // Aplica la clase Bootstrap a todos los campos del formulario
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('#register-form input, #register-form select, #register-form textarea').forEach(function(el) {
+      el.classList.add('form-control', 'mb-3');
+    });
+    // Mejora los labels
+    document.querySelectorAll('#register-form label').forEach(function(label) {
+      label.classList.add('form-label');
+    });
+  });
+</script>
 {% endblock %}

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django import forms
 
 class User(AbstractUser):
     """
@@ -21,7 +22,7 @@ class User(AbstractUser):
     """
     
     def __str__(self):
-        return self.user.username
+        return self.username
         
         
 from django.db import models
@@ -70,3 +71,8 @@ class Empleado(models.Model):
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
+
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = ['nombre', 'apellido', 'email', 'telefono', 'direccion', 'preferencias']
