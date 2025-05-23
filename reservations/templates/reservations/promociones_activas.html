@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} MyHotel | Promociones Activas {% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>Promociones Activas</h1>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  {% if promociones %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Descripción</th>
+          <th>Descuento (%)</th>
+          <th>Descuento Fijo</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Usos</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for promocion in promociones %}
+          <tr>
+            <td>{{ promocion.codigo_promo }}</td>
+            <td>{{ promocion.descripcion }}</td>
+            <td>{{ promocion.descuento_porcentaje|default:"-" }}</td>
+            <td>{{ promocion.descuento_fijo|default:"-" }}</td>
+            <td>{{ promocion.fecha_inicio }}</td>
+            <td>{{ promocion.fecha_fin }}</td>
+            <td>{{ promocion.uso }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No hay promociones activas en este momento.</p>
+  {% endif %}
+</div>
+{% endblock %}

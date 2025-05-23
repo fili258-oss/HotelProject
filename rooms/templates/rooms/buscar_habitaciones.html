@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} MyHotel | Buscar Habitaciones {% endblock %}
+{% block css %}
+<style>
+  .search {
+    min-height: 80vh;
+  }
+  .bg-image {
+    background-image: url("{% static '/assets/imgs/home/WorkBanner.jpg' %}");
+    background-size: cover;
+    background-position: center;
+  }
+  .search-heading {
+    font-weight: 300;
+  }
+  .btn-search {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container-fluid ps-md-0">
+  <div class="row g-0">
+    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+    <div class="col-md-8 col-lg-6">
+      <div class="search d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              <h1 class="search-heading mb-4">Buscar Habitaciones en {{ hotel.nombre }}</h1>
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+              <form action="" method="POST">
+                {% csrf_token %}
+                <div class="form-floating mb-3">
+                  <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio" required>
+                  <label for="fecha_inicio">Fecha de Check-in</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="date" class="form-control" name="fecha_fin" id="fecha_fin" required>
+                  <label for="fecha_fin">Fecha de Check-out</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" name="capacidad_minima" id="capacidad_minima" placeholder="Capacidad mínima" required>
+                  <label for="capacidad_minima">Capacidad mínima</label>
+                </div>
+                <div class="form-check mb-3">
+                  <input type="checkbox" class="form-check-input" name="servicio_wifi" id="servicio_wifi" checked>
+                  <label class="form-check-label" for="servicio_wifi">WiFi Gratis</label>
+                </div>
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-lg btn-primary btn-search text-uppercase fw-bold mb-2">Buscar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

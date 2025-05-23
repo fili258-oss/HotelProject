@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} MyHotel | Dashboard {% endblock %}
+{% block css %}
+<style>
+body {
+  background: linear-gradient(135deg, #e0e7ff 0%, #fff 100%);
+  min-height: 100vh;
+}
+.banner-image {
+  padding-top: 7rem;
+  padding-bottom: 3rem;
+  background: linear-gradient(to bottom, rgba(44,55,72,0.7) 0%, rgba(44,55,72,0.4) 100%), url("{% static '/assets/imgs/dashboard/BannerWelcome.jpg' %}");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.profile img {
+  border-style: solid;
+  border-color: white;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+.dashboard-card {
+  border: none;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 24px rgba(44,55,72,0.08);
+  transition: box-shadow 0.2s;
+  background: #fff;
+}
+.dashboard-card:hover {
+  box-shadow: 0 8px 32px rgba(44,55,72,0.18);
+  transform: translateY(-4px) scale(1.02);
+}
+.dashboard-card .card-body {
+  padding: 2rem 1.5rem;
+}
+.dashboard-card .icon img {
+  filter: drop-shadow(0 2px 8px rgba(44,55,72,0.10));
+}
+.dashboard-card .card-title {
+  font-weight: 600;
+  color: #2d3748;
+  letter-spacing: .05rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.dashboard-card ul {
+  padding-left: 1.2rem;
+}
+.dashboard-card ul li {
+  margin-bottom: 0.7rem;
+  color: #374151;
+  font-size: 1rem;
+}
+.dashboard-card .btn {
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: .05rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.dashboard-card .btn-primary {
+  background: #2d3748;
+  border: none;
+}
+.dashboard-card .btn-primary:hover {
+  background: #374151;
+}
+@media (max-width: 991.98px) {
+  .dashboard-card {
+    margin-bottom: 2rem;
+  }
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="py-5 bg-image-full banner-image">
+  <div class="text-center my-5">
+    <div class="profile">
+      <img class="img-fluid rounded-circle mb-4 profile" src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" alt="..." />
+    </div>
+    <h1 class="text-white fs-3 fw-bolder">Bienvenido {{ user.username }}</h1>
+    <p class="text-white mb-0">Gestión de Reservas de Hotel</p>
+  </div>
+</div>
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Buscar Habitaciones -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card dashboard-card h-100">
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="icon text-center mt-2 mb-2">
+              <img src="{% static 'assets/imgs/dashboard/buscar_habitaciones.svg' %}" alt="Buscar habitaciones" width="80" height="80">
+            </div>
+            <h5 class="card-title text-center">Buscar Habitaciones</h5>
+            <ul class="fa-ul mb-4">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscar por hotel</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Filtrar por fechas</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Capacidad mínima</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>WiFi Gratis</li>
+            </ul>
+            <a href="{% url 'rooms:buscar_habitaciones_disponibles' hotel_id=1 %}" class="btn btn-primary w-100">Buscar</a>
+          </div>
+        </div>
+      </div>
+      <!-- Crear Reserva -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card dashboard-card h-100">
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="icon text-center mt-2 mb-2">
+              <img src="{% static 'assets/imgs/dashboard/crear_reserva.svg' %}" alt="Crear reserva" width="80" height="80">
+            </div>
+            <h5 class="card-title text-center">Crear Reserva</h5>
+            <ul class="fa-ul mb-4">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Seleccionar habitación</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Aplicar promociones</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Generar factura</li>
+            </ul>
+            <a href="{% url 'reservations:crear_reserva' %}" class="btn btn-primary w-100">Reservar</a>
+          </div>
+        </div>
+      </div>
+      <!-- Ver Promociones -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card dashboard-card h-100">
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="icon text-center mt-2 mb-2">
+              <img src="{% static 'assets/imgs/dashboard/promociones.svg' %}" alt="Promociones" width="80" height="80">
+            </div>
+            <h5 class="card-title text-center">Promociones Activas</h5>
+            <ul class="fa-ul mb-4">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Ver promociones activas</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Contar usos</li>
+            </ul>
+            <a href="{% url 'reservations:listar_promociones_activas' %}" class="btn btn-primary w-100">Ver Promociones</a>
+          </div>
+        </div>
+      </div>
+      <!-- Reportes -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card dashboard-card h-100">
+          <div class="card-body d-flex flex-column align-items-center">
+            <div class="icon text-center mt-2 mb-2">
+              <img src="{% static 'assets/imgs/dashboard/reportes.svg' %}" alt="Reportes" width="80" height="80">
+            </div>
+            <h5 class="card-title text-center">Reportes</h5>
+            <ul class="fa-ul mb-4">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Ingresos por hotel</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Ocupación actual</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Puntuación media</li>
+            </ul>
+            <a href="{% url 'reservations:calcular_ingreso_hotel' hotel_id=1 %}" class="btn btn-primary w-100">Ver Reportes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

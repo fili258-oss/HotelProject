@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils import timezone
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 class Reseña(models.Model):
     reseña_id = models.AutoField(primary_key=True)
     reserva = models.ForeignKey('reservations.Reserva', on_delete=models.CASCADE)
-    puntuacion = models.PositiveSmallIntegerField()
+    puntuacion = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)])
     comentario = models.TextField(blank=True)
     fecha_reseña = models.DateTimeField(default=timezone.now)
     visible = models.BooleanField(default=True)
@@ -14,9 +16,6 @@ class Reseña(models.Model):
 
     def __str__(self):
         return f"Reseña {self.reseña_id} - Reserva {self.reserva.reserva_id}"
-    
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
 
 @receiver([post_save, post_delete], sender=Reseña)
 def actualizar_puntuacion_media_hotel(sender, instance, **kwargs):
@@ -25,6 +24,4 @@ def actualizar_puntuacion_media_hotel(sender, instance, **kwargs):
         reserva__habitacion__hotel=hotel,
         visible=True
     ).aggregate(media=Avg('puntuacion'))['media'] or 0
-    # Opcional: Guardar puntuacion_media en el modelo Hotel si se añade un campo
-    # hotel.puntuacion_media = puntuacion_media
-    # hotel.save()
+    # Nota: Si deseas almacenar la puntuación media, necesitarías agregar un campo al modelo Hotel
