@@ -79,3 +79,24 @@ def edit_profile(request):
     return render(request, 'users/edit_profile.html', {'form': form})
 
 """""
+
+from django.shortcuts import get_object_or_404
+from .models import Empleado, Rol
+from rooms.models import Hotel
+from django.db import transaction
+
+def registrar_empleado(hotel_id, rol_id, nombre, apellido, email, telefono, fecha_contratacion, salario):
+    with transaction.atomic():
+        hotel = get_object_or_404(Hotel, hotel_id=hotel_id)
+        rol = get_object_or_404(Rol, rol_id=rol_id)
+        empleado = Empleado.objects.create(
+            hotel=hotel,
+            rol=rol,
+            nombre=nombre,
+            apellido=apellido,
+            email=email,
+            telefono=telefono,
+            fecha_contratacion=fecha_contratacion,
+            salario=salario
+        )
+        return empleado
