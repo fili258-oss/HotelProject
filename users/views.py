@@ -1,89 +1,55 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
 from django.contrib import messages
-from django.urls import reverse_lazy
-#from .forms import UserProfileForm
-#from .models import UserProfile
-from .models import User
+from .forms import LoginForm, ClienteCreationForm
+from .models import Empleado, Rol, Cliente
+from rooms.models import Hotel
+from django.db import transaction
 
 @login_required
 def dashboardApplicant(request):
-    return render(request, 'dashboard/index.html')
+    return render(request, 'users/index.html')
 
-def userLogin(request):    
-    if request.method == 'POST': 
-                              
-            user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-            #print("user", user)
+def userLogin(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
-                
                 if user.is_active:
                     login(request, user)
+                    messages.success(request, 'Inicio de sesión exitoso.')
                     return redirect('users:dashboard')
                 else:
-                    return render(request, 'auth/login.html', {
-                        'error': 'El usuario no esta activo'})
+                    messages.error(request, 'El usuario no está activo.')
             else:
-                return render(request, 'auth/login.html', {
-                        'error': 'Usuario o contraseña incorrectosss'})        
+                messages.error(request, 'Usuario o contraseña incorrectos.')
+        else:
+            messages.error(request, 'Formulario inválido.')
     else:
-        return render(request, 'auth/login.html')
-"""""
+        form = LoginForm()
+    return render(request, 'users/login.html', {'form': form})
+
 def register(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = ClienteCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, '¡Cuenta creada exitosamente! Bienvenido a Hotel Paraíso.')
-            return redirect('core:home')
+            messages.success(request, '¡Cuenta creada exitosamente! Bienvenido.')
+            return redirect('users:dashboard')
+        else:
+            messages.error(request, 'Error al crear la cuenta. Verifica los datos.')
     else:
-        form = CustomUserCreationForm()
-    
+        form = ClienteCreationForm()
     return render(request, 'users/register.html', {'form': form})
-"""""
-"""""
+
 @login_required
-def profile(request):
-    try:
-        profile = request.user.profile
-    except UserProfile.DoesNotExist:
-        profile = UserProfile.objects.create(user=request.user)
-    
-    return render(request, 'users/profile.html', {'profile': profile})
-"""""
-@login_required	
 def logoutView(request):
     logout(request)
     messages.success(request, 'Has cerrado sesión exitosamente.')
     return redirect('users:login')
-"""""
-@login_required
-def edit_profile(request):
-    try:
-        profile = request.user.profile
-    except UserProfile.DoesNotExist:
-        profile = UserProfile.objects.create(user=request.user)
-    
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Tu perfil ha sido actualizado exitosamente.')
-            return redirect('users:profile')
-    else:
-        form = UserProfileForm(instance=profile)
-    
-    return render(request, 'users/edit_profile.html', {'form': form})
-
-"""""
-
-from django.shortcuts import get_object_or_404
-from .models import Empleado, Rol
-from rooms.models import Hotel
-from django.db import transaction
 
 def registrar_empleado(hotel_id, rol_id, nombre, apellido, email, telefono, fecha_contratacion, salario):
     with transaction.atomic():
@@ -100,3 +66,24 @@ def registrar_empleado(hotel_id, rol_id, nombre, apellido, email, telefono, fech
             salario=salario
         )
         return empleado
+
+def registrar_empleado_view(request):
+    if request.method == 'POST':
+        try:
+            empleado = registrar_empleado(
+                hotel_id=int(request.POST['hotel_id']),
+                rol_id=int(request.POST['rol_id']),
+                nombre=request.POST['nombre'],
+                apellido=request.POST['apellido'],
+                email=request.POST['email'],
+                telefono=request.POST.get('telefono', ''),
+                fecha_contratacion=datetime.strptime(request.POST['fecha_contratacion'], '%Y-%m-%d').date(),
+                salario=float(request.POST['salario'])
+            )
+            messages.success(request, f'Empleado {empleado.nombre} registrado exitosamente.')
+            return redirect('users:registrar_empleado')
+        except Exception as e:
+            messages.error(request, f'Error al registrar empleado: {str(e)}')
+    hoteles = Hotel.objects.all()
+    roles = Rol.objects.all()
+    return render(request, 'users/registrar_empleado.html', {'hoteles': hoteles, 'roles': roles})

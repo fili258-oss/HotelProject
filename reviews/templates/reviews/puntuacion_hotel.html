@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} MyHotel | Puntuación de {{ hotel.nombre }} {% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>Puntuación Media de {{ hotel.nombre }}</h1>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  <p>Puntuación Media: {{ puntuacion|floatformat:2 }} / 5</p>
+</div>
+{% endblock %}

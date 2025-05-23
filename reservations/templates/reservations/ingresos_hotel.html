@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} MyHotel | Ingresos de {{ hotel.nombre }} {% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>Ingresos de {{ hotel.nombre }}</h1>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ingresos Facturados (Últimos 30 días)</td>
+        <td>{{ ingresos.ingresos_facturados }}</td>
+      </tr>
+      <tr>
+        <td>Ingresos Pagados (Últimos 30 días)</td>
+        <td>{{ ingresos.ingresos_pagados }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}
