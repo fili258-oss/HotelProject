@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} MyHotel | Dashboard {% endblock %}
+{% block title %} MyHotel | Dashboard Administrador {% endblock %}
 {% block css %}
 <style>
 body {
@@ -67,6 +67,26 @@ body {
 .dashboard-card .btn-primary:hover {
   background: #374151;
 }
+.dashboard-admin-menu {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+.dashboard-admin-menu a {
+  background: #2d3748;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.dashboard-admin-menu a:hover {
+  background: #374151;
+  color: #fff;
+}
 @media (max-width: 991.98px) {
   .dashboard-card {
     margin-bottom: 2rem;
@@ -80,10 +100,22 @@ body {
     <div class="profile">
       <img class="img-fluid rounded-circle mb-4 profile" src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" alt="..." />
     </div>
-    <h1 class="text-white fs-3 fw-bolder">Bienvenido {{ user.username }}</h1>
-    <p class="text-white mb-0">Gestión de Reservas de Hotel</p>
+    <h1 class="text-white fs-3 fw-bolder">Bienvenido Administrador {{ user.username }}</h1>
+    <p class="text-white mb-0">Panel de Administración de MyHotel</p>
   </div>
 </div>
+
+<!-- Menú administrativo -->
+<div class="dashboard-admin-menu container">
+  <a href="{% url 'rooms:registrar_hotel' %}">Registrar Hotel</a>
+  <a href="{% url 'users:registrar_empleado' %}">Registrar Empleado</a>
+  <a href="{% url 'rooms:añadir_servicio' %}">Añadir Servicio</a>
+  <a href="{% url 'reservations:crear_promocion' %}">Crear Promoción</a>
+  <a href="{% url 'reservations:crear_reserva' %}">Crear Reserva</a>
+  <a href="{% url 'reservations:listar_promociones_activas' %}">Ver Promociones Activas</a>
+  <a href="{% url 'rooms:habitaciones_nunca_reservadas' %}">Habitaciones Nunca Reservadas</a>
+</div>
+
 <section class="py-5">
   <div class="container">
     <div class="row g-4">

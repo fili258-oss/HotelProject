@@ -51,6 +51,21 @@
                             <a class="nav-link" href="{% url 'users:dashboard' %}">Dashboard</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'rooms:registrar_hotel' %}">Registrar Hotel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:registrar_empleado' %}">Registrar Empleado</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'rooms:añadir_servicio' %}">Añadir Servicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'reservations:crear_promocion' %}">Crear Promoción</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'reservations:crear_reserva' %}">Crear Reserva</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'users:logout' %}">Cerrar Sesión</a>
                         </li>
                     {% else %}
