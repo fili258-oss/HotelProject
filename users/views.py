@@ -69,6 +69,7 @@ def registrar_empleado(hotel_id, rol_id, nombre, apellido, email, telefono, fech
 
 def registrar_empleado_view(request):
     if request.method == 'POST':
+        print(request.POST["fecha_contratacion"])
         try:
             empleado = registrar_empleado(
                 hotel_id=int(request.POST['hotel_id']),
@@ -77,7 +78,8 @@ def registrar_empleado_view(request):
                 apellido=request.POST['apellido'],
                 email=request.POST['email'],
                 telefono=request.POST.get('telefono', ''),
-                fecha_contratacion=datetime.strptime(request.POST['fecha_contratacion'], '%Y-%m-%d').date(),
+                #fecha_contratacion=datetime.strptime(request.POST['fecha_contratacion'], '%Y-%m-%d').date(),
+                fecha_contratacion=request.POST['fecha_contratacion'],
                 salario=float(request.POST['salario'])
             )
             messages.success(request, f'Empleado {empleado.nombre} registrado exitosamente.')

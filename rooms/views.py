@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Hotel, Servicio, HotelServicios, Habitacion, RoomServicios
+from .models import Hotel, Servicio, HotelServicios, Habitacion, RoomServicios, TipoHabitacion
 from reservations.models import Reserva
 from django.db import transaction
 from django.db.models import Q
@@ -39,7 +39,7 @@ def registrar_hotel_view(request):
             messages.error(request, f'Error al registrar hotel: {str(e)}')
     return render(request, 'rooms/registrar_hotel.html')
 
-def añadir_servicio(nombre_servicio, descripcion_servicio=''):
+def anadir_servicio(nombre_servicio, descripcion_servicio=''):
     with transaction.atomic():
         servicio = Servicio.objects.create(
             nombre_servicio=nombre_servicio,
@@ -47,18 +47,18 @@ def añadir_servicio(nombre_servicio, descripcion_servicio=''):
         )
         return servicio
 
-def añadir_servicio_view(request):
+def anadir_servicio_view(request):
     if request.method == 'POST':
         try:
-            servicio = añadir_servicio(
+            servicio = anadir_servicio(
                 nombre_servicio=request.POST['nombre_servicio'],
                 descripcion_servicio=request.POST.get('descripcion_servicio', '')
             )
             messages.success(request, f'Servicio {servicio.nombre_servicio} añadido exitosamente.')
-            return redirect('rooms:añadir_servicio')
+            return redirect('rooms:anadir_servicio')
         except Exception as e:
             messages.error(request, f'Error al añadir servicio: {str(e)}')
-    return render(request, 'rooms/añadir_servicio.html')
+    return render(request, 'rooms/anadir_servicio.html')
 
 def asociar_servicio_hotel(hotel_id, servicio_id):
     with transaction.atomic():
@@ -122,3 +122,34 @@ def listar_habitaciones_nunca_reservadas():
 def listar_habitaciones_nunca_reservadas_view(request):
     habitaciones = listar_habitaciones_nunca_reservadas()
     return render(request, 'rooms/habitaciones_nunca_reservadas.html', {'habitaciones': habitaciones})
+
+def crear_habitacion(hotel_id, numero_habitacion, tipo_habitacion_id, precio_por_noche, estado):
+    with transaction.atomic():
+        hotel = get_object_or_404(Hotel, hotel_id=hotel_id)
+        tipo = get_object_or_404(TipoHabitacion, tipo_habitacion_id=tipo_habitacion_id)
+        habitacion = Habitacion.objects.create(
+            hotel=hotel,
+            numero_habitacion=numero_habitacion,
+            tipo_habitacion=tipo,
+            precio_por_noche=precio_por_noche,
+            estado=estado
+        )
+        return habitacion
+
+def crear_habitacion_view(request):
+    if request.method == 'POST':
+        try:
+            habitacion = crear_habitacion(
+                hotel_id=int(request.POST['hotel_id']),
+                numero_habitacion=request.POST['numero_habitacion'],
+                tipo_habitacion_id=int(request.POST['tipo_habitacion_id']),
+                precio_por_noche=float(request.POST['precio_por_noche']),
+                estado=request.POST['estado']
+            )
+            messages.success(request, f'Habitación {habitacion.numero_habitacion} creada exitosamente.')
+            return redirect('rooms:crear_habitacion')
+        except Exception as e:
+            messages.error(request, f'Error al crear habitación: {str(e)}')
+    hoteles = Hotel.objects.all()
+    tipos_habitacion = TipoHabitacion.objects.all()
+    return render(request, 'rooms/crear_habitacion.html', {'hoteles': hoteles, 'tipos_habitacion': tipos_habitacion})

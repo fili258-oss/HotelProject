@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} MyHotel | Crear Habitación {% endblock %}
+{% block css %}
+<style>
+    .register {
+        min-height: 80vh;
+    }
+
+    .bg-image {
+        background-image: url("{% static '/assets/imgs/home/WorkBanner.jpg' %}");
+        background-size: cover;
+        background-position: center;
+    }
+
+    .register-heading {
+        font-weight: 300;
+    }
+
+    .btn-register {
+        font-size: 0.9rem;
+        letter-spacing: 0.05rem;
+        padding: 0.75rem 1rem;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container-fluid ps-md-0">
+    <div class="row g-0">
+        <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+        <div class="col-md-8 col-lg-6">
+            <div class="register d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 col-lg-8 mx-auto">
+                            <h1 class="register-heading mb-4">Crear Habitación</h1>
+                            {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                            {% endfor %}
+                            {% endif %}
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <div class="form-floating mb-3">
+                                    <select class="form-control" name="hotel_id" id="hotel_id" required>
+                                        {% for hotel in hoteles %}
+                                        <option value="{{ hotel.hotel_id }}">{{ hotel.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="hotel_id">Hotel</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" name="numero_habitacion"
+                                        id="numero_habitacion" placeholder="Número de habitación" required>
+                                    <label for="numero_habitacion">Número de habitación</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <select class="form-control" name="tipo_habitacion_id" id="tipo_habitacion_id"
+                                        required>
+                                        {% for tipo in tipos_habitacion %}
+                                        <option value="{{ tipo.tipo_habitacion_id }}">{{ tipo.nombre_tipo }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="tipo_habitacion_id">Tipo de habitación</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="0.01" class="form-control" name="precio_por_noche"
+                                        id="precio_por_noche" placeholder="Precio por noche" required>
+                                    <label for="precio_por_noche">Precio por noche</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <select class="form-control" name="estado" id="estado" required>
+                                        <option value="Disponible">Disponible</option>
+                                        <option value="Ocupada">Ocupada</option>
+                                        <option value="Mantenimiento">Mantenimiento</option>
+                                    </select>
+                                    <label for="estado">Estado</label>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit"
+                                        class="btn btn-lg btn-primary btn-register text-uppercase fw-bold mb-2">Crear</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
