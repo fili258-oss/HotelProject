@@ -2,39 +2,68 @@
 {% block title %}Ajustes Administrativos{% endblock %}
 {% block content %}
 <div class="container py-5">
-  <h1>Ajustes Administrativos</h1>
-  <h3>Asignar Servicio a Hotel</h3>
-  <form method="post">
-    {% csrf_token %}
-    <input type="hidden" name="tipo" value="hotel_servicio">
-    <select name="hotel_id" required>
-      {% for hotel in hoteles %}
-        <option value="{{ hotel.hotel_id }}">{{ hotel.nombre }}</option>
-      {% endfor %}
-    </select>
-    <select name="servicio_id" required>
-      {% for servicio in servicios %}
-        <option value="{{ servicio.servicio_id }}">{{ servicio.nombre_servicio }}</option>
-      {% endfor %}
-    </select>
-    <button type="submit" class="btn btn-primary">Asignar</button>
-  </form>
-  <h3 class="mt-4">Asignar Servicio a Habitación</h3>
-  <form method="post">
-    {% csrf_token %}
-    <input type="hidden" name="tipo" value="habitacion_servicio">
-    <select name="habitacion_id" required>
-      {% for habitacion in habitaciones %}
-        <option value="{{ habitacion.habitacion_id }}">{{ habitacion }}</option>
-      {% endfor %}
-    </select>
-    <select name="servicio_id" required>
-      {% for servicio in servicios %}
-        <option value="{{ servicio.servicio_id }}">{{ servicio.nombre_servicio }}</option>
-      {% endfor %}
-    </select>
-    <button type="submit" class="btn btn-primary">Asignar</button>
-  </form>
-  <!-- Agrega más formularios de ajustes según lo que necesites -->
+  <h1 class="mb-4"><i class="fas fa-cogs me-2"></i>Ajustes Administrativos</h1>
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <i class="fas fa-hotel me-2"></i>Asignar Servicio a Hotel
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="tipo" value="hotel_servicio">
+            <div class="mb-3">
+              <label for="hotel_id" class="form-label">Hotel</label>
+              <select name="hotel_id" class="form-select" required>
+                {% for hotel in hoteles %}
+                  <option value="{{ hotel.hotel_id }}">{{ hotel.nombre }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="servicio_id" class="form-label">Servicio</label>
+              <select name="servicio_id" class="form-select" required>
+                {% for servicio in servicios %}
+                  <option value="{{ servicio.servicio_id }}">{{ servicio.nombre_servicio }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Asignar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-success text-white">
+          <i class="fas fa-door-open me-2"></i>Asignar Servicio a Habitación
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="tipo" value="habitacion_servicio">
+            <div class="mb-3">
+              <label for="habitacion_id" class="form-label">Habitación</label>
+              <select name="habitacion_id" class="form-select" required>
+                {% for habitacion in habitaciones %}
+                  <option value="{{ habitacion.habitacion_id }}">{{ habitacion }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="servicio_id" class="form-label">Servicio</label>
+              <select name="servicio_id" class="form-select" required>
+                {% for servicio in servicios %}
+                  <option value="{{ servicio.servicio_id }}">{{ servicio.nombre_servicio }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Asignar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

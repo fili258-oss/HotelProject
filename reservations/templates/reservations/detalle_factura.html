@@ -2,26 +2,47 @@
 {% block title %}Detalle Factura{% endblock %}
 {% block content %}
 <div class="container py-5">
-  <h1>Factura #{{ factura.factura_id }}</h1>
-  <p>Cliente: {{ factura.reserva.cliente }}</p>
-  <p>Monto total: {{ factura.monto_total }}</p>
-  <p>Estado: {{ factura.estado_pago }}</p>
-  <h3>Items</h3>
-  <ul>
-    {% for item in items %}
-      <li>{{ item.concepto }}: {{ item.subtotal }}</li>
-    {% endfor %}
-  </ul>
-  <h3>Pagos</h3>
-  <ul>
-    {% for pago in pagos %}
-      <li>{{ pago.metodo_pago }} - {{ pago.monto }} - {{ pago.fecha_pago }}</li>
-    {% empty %}
-      <li>No hay pagos registrados.</li>
-    {% endfor %}
-  </ul>
-  {% if factura.estado_pago != 'Pagado' %}
-    <a href="{% url 'reservations:realizar_pago' factura.factura_id %}" class="btn btn-success">Realizar Pago</a>
-  {% endif %}
+  <div class="card shadow-lg">
+    <div class="card-header bg-dark text-white">
+      <h2 class="mb-0"><i class="fas fa-file-invoice-dollar me-2"></i>Factura #{{ factura.factura_id }}</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Cliente:</strong> {{ factura.reserva.cliente }}</p>
+      <p><strong>Monto total:</strong> ${{ factura.monto_total }}</p>
+      <p>
+        <strong>Estado:</strong>
+        {% if factura.estado_pago == 'Pagado' %}
+          <span class="badge bg-success">Pagado</span>
+        {% else %}
+          <span class="badge bg-warning text-dark">Pendiente</span>
+        {% endif %}
+      </p>
+      <hr>
+      <h5>Items</h5>
+      <ul class="list-group mb-3">
+        {% for item in items %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ item.concepto }}
+            <span>${{ item.subtotal }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <h5>Pagos</h5>
+      <ul class="list-group mb-3">
+        {% for pago in pagos %}
+          <li class="list-group-item">
+            <i class="fas fa-credit-card me-2"></i>{{ pago.metodo_pago }} - ${{ pago.monto }} - {{ pago.fecha_pago|date:"d/m/Y H:i" }}
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted">No hay pagos registrados.</li>
+        {% endfor %}
+      </ul>
+      {% if factura.estado_pago != 'Pagado' %}
+        <a href="{% url 'reservations:realizar_pago' factura.factura_id %}" class="btn btn-success">
+          <i class="fas fa-credit-card me-2"></i>Realizar Pago
+        </a>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% endblock %}
