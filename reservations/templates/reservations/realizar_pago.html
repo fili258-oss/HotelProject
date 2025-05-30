@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Realizar Pago{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>Realizar Pago - Factura #{{ factura.factura_id }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label>Monto a pagar</label>
+      <input type="number" step="0.01" name="monto" class="form-control" value="{{ factura.monto_total }}" required>
+    </div>
+    <div class="mb-3">
+      <label>Método de pago</label>
+      <input type="text" name="metodo_pago" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label>Referencia (opcional)</label>
+      <input type="text" name="referencia_pago" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Pagar</button>
+  </form>
+</div>
+{% endblock %}

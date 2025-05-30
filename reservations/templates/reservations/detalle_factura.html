@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Detalle Factura{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>Factura #{{ factura.factura_id }}</h1>
+  <p>Cliente: {{ factura.reserva.cliente }}</p>
+  <p>Monto total: {{ factura.monto_total }}</p>
+  <p>Estado: {{ factura.estado_pago }}</p>
+  <h3>Items</h3>
+  <ul>
+    {% for item in items %}
+      <li>{{ item.concepto }}: {{ item.subtotal }}</li>
+    {% endfor %}
+  </ul>
+  <h3>Pagos</h3>
+  <ul>
+    {% for pago in pagos %}
+      <li>{{ pago.metodo_pago }} - {{ pago.monto }} - {{ pago.fecha_pago }}</li>
+    {% empty %}
+      <li>No hay pagos registrados.</li>
+    {% endfor %}
+  </ul>
+  {% if factura.estado_pago != 'Pagado' %}
+    <a href="{% url 'reservations:realizar_pago' factura.factura_id %}" class="btn btn-success">Realizar Pago</a>
+  {% endif %}
+</div>
+{% endblock %}

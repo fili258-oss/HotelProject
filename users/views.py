@@ -6,6 +6,7 @@ from .forms import LoginForm, ClienteCreationForm
 from .models import Empleado, Rol, Cliente
 from rooms.models import Hotel
 from django.db import transaction
+from decimal import Decimal
 
 @login_required
 def dashboardApplicant(request):
@@ -80,7 +81,7 @@ def registrar_empleado_view(request):
                 telefono=request.POST.get('telefono', ''),
                 #fecha_contratacion=datetime.strptime(request.POST['fecha_contratacion'], '%Y-%m-%d').date(),
                 fecha_contratacion=request.POST['fecha_contratacion'],
-                salario=float(request.POST['salario'])
+                salario=Decimal(request.POST['salario'])  # <-- Cambiado a Decimal
             )
             messages.success(request, f'Empleado {empleado.nombre} registrado exitosamente.')
             return redirect('users:registrar_empleado')

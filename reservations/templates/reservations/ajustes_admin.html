@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Ajustes Administrativos{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>Ajustes Administrativos</h1>
+  <h3>Asignar Servicio a Hotel</h3>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="tipo" value="hotel_servicio">
+    <select name="hotel_id" required>
+      {% for hotel in hoteles %}
+        <option value="{{ hotel.hotel_id }}">{{ hotel.nombre }}</option>
+      {% endfor %}
+    </select>
+    <select name="servicio_id" required>
+      {% for servicio in servicios %}
+        <option value="{{ servicio.servicio_id }}">{{ servicio.nombre_servicio }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Asignar</button>
+  </form>
+  <h3 class="mt-4">Asignar Servicio a Habitación</h3>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="tipo" value="habitacion_servicio">
+    <select name="habitacion_id" required>
+      {% for habitacion in habitaciones %}
+        <option value="{{ habitacion.habitacion_id }}">{{ habitacion }}</option>
+      {% endfor %}
+    </select>
+    <select name="servicio_id" required>
+      {% for servicio in servicios %}
+        <option value="{{ servicio.servicio_id }}">{{ servicio.nombre_servicio }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Asignar</button>
+  </form>
+  <!-- Agrega más formularios de ajustes según lo que necesites -->
+</div>
+{% endblock %}

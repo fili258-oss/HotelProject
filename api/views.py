@@ -1,4 +1,5 @@
-#from django.shortcuts import render
+from django.shortcuts import render
+from decimal import Decimal
 
 # Create your views here.
 from rest_framework.views import APIView
@@ -7,6 +8,7 @@ from rest_framework import status
 from rooms.views import registrar_hotel, buscar_habitaciones_disponibles
 from reservations.views import crear_promocion, crear_reserva
 from datetime import datetime
+
 
 class HotelCreateView(APIView):
     def post(self, request):
@@ -48,8 +50,8 @@ class PromocionCreateView(APIView):
             promocion = crear_promocion(
                 codigo_promo=data['codigo_promo'],
                 descripcion=data.get('descripcion', ''),
-                descuento_porcentaje=float(data['descuento_porcentaje']) if data.get('descuento_porcentaje') else None,
-                descuento_fijo=float(data['descuento_fijo']) if data.get('descuento_fijo') else None,
+                descuento_porcentaje=Decimal(data['descuento_porcentaje']) if data.get('descuento_porcentaje') else None,
+                descuento_fijo=Decimal(data['descuento_fijo']) if data.get('descuento_fijo') else None,
                 fecha_inicio=datetime.strptime(data['fecha_inicio'], '%Y-%m-%d').date(),
                 fecha_fin=datetime.strptime(data['fecha_fin'], '%Y-%m-%d').date(),
                 activa=data.get('activa', True)
@@ -78,3 +80,4 @@ class ReservaCreateView(APIView):
             }, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        

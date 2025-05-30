@@ -5,6 +5,7 @@ from reservations.models import Reserva
 from django.db import transaction
 from django.db.models import Q
 from datetime import datetime
+from decimal import Decimal
 
 def registrar_hotel(nombre, direccion, ciudad, pais, telefono, email_contacto, categoria_estrellas, descripcion_general=''):
     with transaction.atomic():
@@ -143,7 +144,7 @@ def crear_habitacion_view(request):
                 hotel_id=int(request.POST['hotel_id']),
                 numero_habitacion=request.POST['numero_habitacion'],
                 tipo_habitacion_id=int(request.POST['tipo_habitacion_id']),
-                precio_por_noche=float(request.POST['precio_por_noche']),
+                precio_por_noche=Decimal(request.POST['precio_por_noche']),
                 estado=request.POST['estado']
             )
             messages.success(request, f'Habitación {habitacion.numero_habitacion} creada exitosamente.')

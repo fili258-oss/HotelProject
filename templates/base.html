@@ -67,6 +67,12 @@
                             <a class="nav-link" href="{% url 'reservations:crear_reserva' %}">Crear Reserva</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'reservations:listar_facturas' %}">Facturas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'reservations:ajustes_admin' %}">Ajustes Admin</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'users:logout' %}">Cerrar Sesión</a>
                         </li>
                     {% else %}

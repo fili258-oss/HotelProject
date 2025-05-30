@@ -1,11 +1,84 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from .models import Factura, Pago, Reserva, ItemFactura
+from rooms.models import Hotel, Habitacion, Servicio, RoomServicios, HotelServicios
+from django.db import transaction
+from decimal import Decimal
+from datetime import datetime
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from .models import Promocion, Reserva, ReservaPromociones, Factura, ItemFactura, Pago
 from rooms.models import Hotel, Habitacion
 from users.models import Cliente
 from django.db import transaction
 from django.db.models import Sum, Count
 from datetime import datetime, timedelta, date
+from decimal import Decimal
+
+def listar_facturas_view(request):
+    facturas = Factura.objects.select_related('reserva', 'reserva__cliente').all().order_by('-fecha_emision')
+    return render(request, 'reservations/listar_facturas.html', {'facturas': facturas})
+
+def detalle_factura_view(request, factura_id):
+    factura = get_object_or_404(Factura, factura_id=factura_id)
+    items = ItemFactura.objects.filter(factura=factura)
+    pagos = Pago.objects.filter(factura=factura)
+    return render(request, 'reservations/detalle_factura.html', {
+        'factura': factura,
+        'items': items,
+        'pagos': pagos
+    })
+
+def realizar_pago_view(request, factura_id):
+    factura = get_object_or_404(Factura, factura_id=factura_id)
+    if request.method == 'POST':
+        try:
+            monto = Decimal(request.POST['monto'])
+            metodo_pago = request.POST['metodo_pago']
+            referencia_pago = request.POST.get('referencia_pago', '')
+            if monto <= 0 or monto > factura.monto_total:
+                messages.error(request, 'Monto inválido.')
+            else:
+                Pago.objects.create(
+                    factura=factura,
+                    monto=monto,
+                    metodo_pago=metodo_pago,
+                    referencia_pago=referencia_pago
+                )
+                factura.estado_pago = 'Pagado'
+                factura.save()
+                messages.success(request, 'Pago registrado correctamente.')
+                return redirect('reservations:listar_facturas')
+        except Exception as e:
+            messages.error(request, f'Error al registrar pago: {str(e)}')
+    return render(request, 'reservations/realizar_pago.html', {'factura': factura})
+
+# Sección de ajustes administrativos
+def ajustes_admin_view(request):
+    hoteles = Hotel.objects.all()
+    habitaciones = Habitacion.objects.all()
+    servicios = Servicio.objects.all()
+    if request.method == 'POST':
+        tipo = request.POST.get('tipo')
+        if tipo == 'hotel_servicio':
+            hotel_id = request.POST['hotel_id']
+            servicio_id = request.POST['servicio_id']
+            HotelServicios.objects.get_or_create(hotel_id=hotel_id, servicio_id=servicio_id)
+            messages.success(request, 'Servicio asignado al hotel.')
+        elif tipo == 'habitacion_servicio':
+            habitacion_id = request.POST['habitacion_id']
+            servicio_id = request.POST['servicio_id']
+            RoomServicios.objects.get_or_create(habitacion_id=habitacion_id, servicio_id=servicio_id)
+            messages.success(request, 'Servicio asignado a la habitación.')
+        # Puedes agregar más ajustes aquí
+        return redirect('reservations:ajustes_admin')
+    return render(request, 'reservations/ajustes_admin.html', {
+        'hoteles': hoteles,
+        'habitaciones': habitaciones,
+        'servicios': servicios
+    })
+    
 
 def crear_promocion(codigo_promo, descripcion, descuento_porcentaje=None, descuento_fijo=None, fecha_inicio=None, fecha_fin=None, activa=True):
     with transaction.atomic():
@@ -26,8 +99,8 @@ def crear_promocion_view(request):
             promocion = crear_promocion(
                 codigo_promo=request.POST['codigo_promo'],
                 descripcion=request.POST.get('descripcion', ''),
-                descuento_porcentaje=float(request.POST['descuento_porcentaje']) if request.POST.get('descuento_porcentaje') else None,
-                descuento_fijo=float(request.POST['descuento_fijo']) if request.POST.get('descuento_fijo') else None,
+                descuento_porcentaje=Decimal(request.POST['descuento_porcentaje']) if request.POST.get('descuento_porcentaje') else None,
+                descuento_fijo=Decimal(request.POST['descuento_fijo']) if request.POST.get('descuento_fijo') else None,
                 fecha_inicio=datetime.strptime(request.POST['fecha_inicio'], '%Y-%m-%d').date(),
                 fecha_fin=datetime.strptime(request.POST['fecha_fin'], '%Y-%m-%d').date(),
                 activa=request.POST.get('activa', 'on') == 'on'
@@ -58,7 +131,7 @@ def crear_reserva(cliente_id, habitacion_id, fecha_checkin, fecha_checkout, nume
         dias = (fecha_checkout - fecha_checkin).days
         costo_base = habitacion.precio_por_noche * dias
 
-        descuento = 0
+        descuento = Decimal('0')
         promocion = None
         if codigo_promo:
             promocion = get_object_or_404(
@@ -69,7 +142,7 @@ def crear_reserva(cliente_id, habitacion_id, fecha_checkin, fecha_checkout, nume
                 fecha_fin__gte=date.today()
             )
             if promocion.descuento_porcentaje:
-                descuento = costo_base * (promocion.descuento_porcentaje / 100)
+                descuento = costo_base * (promocion.descuento_porcentaje / Decimal('100'))
             elif promocion.descuento_fijo:
                 descuento = promocion.descuento_fijo
 
@@ -91,7 +164,7 @@ def crear_reserva(cliente_id, habitacion_id, fecha_checkin, fecha_checkout, nume
         if promocion:
             ReservaPromociones.objects.create(reserva=reserva, promocion=promocion)
 
-        iva_rate = 0.16
+        iva_rate = Decimal('0.16')
         monto_iva = costo_total * iva_rate
         factura = Factura.objects.create(
             reserva=reserva,

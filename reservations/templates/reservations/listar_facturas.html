@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Facturas{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>Facturas</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th><th>Cliente</th><th>Monto</th><th>Estado</th><th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for factura in facturas %}
+      <tr>
+        <td>{{ factura.factura_id }}</td>
+        <td>{{ factura.reserva.cliente }}</td>
+        <td>{{ factura.monto_total }}</td>
+        <td>{{ factura.estado_pago }}</td>
+        <td>
+          <a href="{% url 'reservations:detalle_factura' factura.factura_id %}">Ver</a>
+          {% if factura.estado_pago != 'Pagado' %}
+          | <a href="{% url 'reservations:realizar_pago' factura.factura_id %}">Pagar</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
