@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import pymysql
+
+# Install pymysql as MySQLdb
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,11 +85,24 @@ WSGI_APPLICATION = 'my_hotel.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'database_1',                # Cambia por el nombre de tu base de datos
+        'USER': 'admin',                       # Cambia por tu usuario de Aurora
+        'PASSWORD': 'D*&&UIdg^Yy9F)YTLo9Q',                # Cambia por tu contraseña de Aurora
+        'HOST': 'database-1.cluster-cw9uo0k4sq9q.us-east-1.rds.amazonaws.com ',  # Cambia por el endpoint de tu clúster
+        'PORT': '3306',                             # Puerto por defecto de MySQL
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
