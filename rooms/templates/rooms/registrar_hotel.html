@@ -3,34 +3,22 @@
 {% block title %} MyHotel | Registrar Hotel {% endblock %}
 {% block css %}
 <style>
-  .register {
-    min-height: 80vh;
-  }
-  .bg-image {
-    background-image: url("{% static '/assets/imgs/home/WorkBanner.jpg' %}");
-    background-size: cover;
-    background-position: center;
-  }
-  .register-heading {
-    font-weight: 300;
-  }
-  .btn-register {
-    font-size: 0.9rem;
-    letter-spacing: 0.05rem;
-    padding: 0.75rem 1rem;
-  }
+  .register { min-height: 80vh; }
+  .register-heading { font-weight: 300; }
+  .btn-register { font-size: 0.9rem; letter-spacing: 0.05rem; padding: 0.75rem 1rem; }
 </style>
 {% endblock %}
 {% block content %}
 <div class="container-fluid ps-md-0">
   <div class="row g-0">
-    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
-    <div class="col-md-8 col-lg-6">
+    <div class="col-md-8 col-lg-6 mx-auto">
       <div class="register d-flex align-items-center py-5">
         <div class="container">
           <div class="row">
             <div class="col-md-9 col-lg-8 mx-auto">
-              <h1 class="register-heading mb-4">Registrar Hotel</h1>
+              <h1 class="register-heading mb-4">
+                <i class="fas fa-hotel me-2"></i>Registrar Hotel
+              </h1>
               {% if messages %}
                 {% for message in messages %}
                   <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
