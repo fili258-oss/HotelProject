@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'my_hotel.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'database_1',                # Cambia por el nombre de tu base de datos
+        'NAME': 'hotelproject_db',                # Cambia por el nombre de tu base de datos
         'USER': 'admin',                       # Cambia por tu usuario de Aurora
         'PASSWORD': 'D*&&UIdg^Yy9F)YTLo9Q',                # Cambia por tu contraseña de Aurora
         'HOST': 'database-1.cluster-cw9uo0k4sq9q.us-east-1.rds.amazonaws.com',  # Cambia por el endpoint de tu clúster
