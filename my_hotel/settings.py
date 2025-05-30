@@ -86,10 +86,10 @@ WSGI_APPLICATION = 'my_hotel.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hotelproject_db',                # Cambia por el nombre de tu base de datos
+        'NAME': 'myhotel_db',                # Cambia por el nombre de tu base de datos
         'USER': 'admin',                       # Cambia por tu usuario de Aurora
         'PASSWORD': 'admin123*',                # Cambia por tu contraseña de Aurora
-        'HOST': 'database-2.cw9uo0k4sq9q.us-east-1.rds.amazonaws.com ',  # Cambia por el endpoint de tu clúster
+        'HOST': 'database-1.c2daw04yg7a4.us-east-1.rds.amazonaws.com',  # Cambia por el endpoint de tu clúster
         'PORT': '3306',                             # Puerto por defecto de MySQL
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
