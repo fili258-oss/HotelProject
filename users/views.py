@@ -5,8 +5,10 @@ from django.contrib import messages
 from .forms import LoginForm, ClienteCreationForm
 from .models import Empleado, Rol, Cliente
 from rooms.models import Hotel
+from reservations.models import Reserva
 from django.db import transaction
 from decimal import Decimal
+from datetime import date
 
 @login_required
 def dashboardApplicant(request):
@@ -90,3 +92,9 @@ def registrar_empleado_view(request):
     hoteles = Hotel.objects.all()
     roles = Rol.objects.all()
     return render(request, 'users/registrar_empleado.html', {'hoteles': hoteles, 'roles': roles})
+
+@login_required
+def mis_reservas_view(request):
+    cliente = getattr(request.user, 'cliente', None)
+    reservas = Reserva.objects.filter(cliente=cliente).select_related('habitacion', 'habitacion__hotel')
+    return render(request, 'users/mis_reservas.html', {'reservas': reservas, 'today': date.today()})

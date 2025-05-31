@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Dejar Reseña{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>Dejar Reseña para la Reserva #{{ reserva.reserva_id }}</h1>
+  <p>Habitación: {{ reserva.habitacion }}</p>
+  <p>Check-in: {{ reserva.fecha_checkin }} | Check-out: {{ reserva.fecha_checkout }}</p>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="id_puntuacion" class="form-label">Puntuación</label>
+      {{ form.puntuacion }}
+    </div>
+    <div class="mb-3">
+      <label for="id_comentario" class="form-label">Comentario</label>
+      {{ form.comentario }}
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar Reseña</button>
+  </form>
+</div>
+{% endblock %}

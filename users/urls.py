@@ -15,5 +15,5 @@ urlpatterns = [
     # path('', views.home, name='home'),
     path('login', views.userLogin, name='login'), 
     # Cambio de contraseña
-        
+    path('mis-reservas/', views.mis_reservas_view, name='mis_reservas'),
 ]

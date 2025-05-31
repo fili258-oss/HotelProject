@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Mis Reservas{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4"><i class="fas fa-calendar-check me-2"></i>Mis Reservas</h1>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  {% if reservas %}
+    <table class="table table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Hotel</th>
+          <th>Habitación</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Estado</th>
+          <th>Costo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reserva in reservas %}
+        <tr>
+          <td>{{ reserva.reserva_id }}</td>
+          <td>{{ reserva.habitacion.hotel.nombre }}</td>
+          <td>{{ reserva.habitacion.numero_habitacion }}</td>
+          <td>{{ reserva.fecha_checkin }}</td>
+          <td>{{ reserva.fecha_checkout }}</td>
+          <td>
+            {% if reserva.estado_reserva == 'Confirmada' %}
+              <span class="badge bg-success">Confirmada</span>
+            {% elif reserva.estado_reserva == 'Pendiente' %}
+              <span class="badge bg-warning text-dark">Pendiente</span>
+            {% else %}
+              <span class="badge bg-secondary">{{ reserva.estado_reserva }}</span>
+            {% endif %}
+          </td>
+          <td>${{ reserva.costo_total_estimado }}</td>
+          <td>
+            {% if reserva.fecha_checkout <= today and not reserva.reseña_set.exists %}
+              <a href="{% url 'reviews:crear_reseña' reserva.reserva_id %}" class="btn btn-warning btn-sm">
+                <i class="fas fa-star"></i> Dejar reseña
+              </a>
+            {% elif reserva.reseña_set.exists %}
+              <span class="text-success"><i class="fas fa-check-circle"></i> Reseña enviada</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-info">No tienes reservas registradas.</div>
+  {% endif %}
+</div>
+{% endblock %}
